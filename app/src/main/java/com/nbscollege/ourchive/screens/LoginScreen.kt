@@ -49,10 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
-import com.nbscollege.ourchive.model.Register
+import com.nbscollege.ourchive.model.RegisterData
+
 import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import com.nbscollege.ourchive.ui.theme.Typography
+import java.io.File
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,6 +69,8 @@ fun LoginScreen(navController: NavController){
     var seePassText by remember {
         mutableStateOf(false)
     }
+    val filePath = File("register.csv")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -175,5 +179,9 @@ fun LoginScreen(navController: NavController){
 
         }
     }
+
+}
+
+fun accessLogin(registerData: ArrayList<RegisterData>){
 
 }

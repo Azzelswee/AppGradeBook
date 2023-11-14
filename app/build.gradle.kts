@@ -69,5 +69,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.4")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.2")
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
 
 }

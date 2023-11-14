@@ -68,6 +68,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
+import com.nbscollege.ourchive.model.RegisterData
+
 import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.ui.theme.Gold
 import com.nbscollege.ourchive.ui.theme.RedOrange
@@ -94,7 +96,7 @@ fun RegistrationScreen(
     var seePassText by remember {
         mutableStateOf(false)
     }
-    var selectedCourse = ""
+
     Column{
         Row (
                 modifier = Modifier
@@ -274,7 +276,6 @@ fun RegistrationScreen(
                             onClick = {
                                 selectedIndex = index
                                 expanded = false
-                                selectedCourse = s.take(s.length)
 
                             },
                             colors = MenuDefaults.itemColors(
@@ -290,6 +291,8 @@ fun RegistrationScreen(
             Button(
                 onClick = {
                     navController.navigate(MainScreens.LOGIN.name)
+                    val register = RegisterData(username, email, password, course = courses[selectedIndex])
+                    accessLogin(saveData(registerData = register))
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = RedOrange
@@ -306,5 +309,11 @@ fun RegistrationScreen(
 
     }
 
+}
+fun saveData(registerData: RegisterData): ArrayList<RegisterData>{
+
+    val userLists = ArrayList<RegisterData>()
+    userLists.add(registerData)
+    return userLists
 }
 
