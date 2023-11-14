@@ -66,14 +66,18 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
+import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.ui.theme.Gold
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import kotlinx.coroutines.flow.merge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrationScreen(){
+fun RegistrationScreen(
+    navController: NavController
+){
 
     var username by remember{ mutableStateOf("") }
     var email by remember{ mutableStateOf("") }
@@ -90,8 +94,7 @@ fun RegistrationScreen(){
     var seePassText by remember {
         mutableStateOf(false)
     }
-    var seeText = PasswordVisualTransformation()
-
+    var selectedCourse = ""
     Column{
         Row (
                 modifier = Modifier
@@ -99,7 +102,9 @@ fun RegistrationScreen(){
                     .padding(10.dp)
             ){
                 TextButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate(MainScreens.LOGIN.name)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
                         contentColor = RedOrange
@@ -128,9 +133,9 @@ fun RegistrationScreen(){
                 color = RedOrange
             )
             TextField(
-                value = username.uppercase(),
+                value = username,
                 onValueChange = { username = it },
-                placeholder = { Text(text = "USERNAME", color = Color.Gray)},
+                placeholder = { Text(text = "Username", color = Color.Gray)},
                 trailingIcon = { Icon(Icons.Rounded.Person, "Username")},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
@@ -144,9 +149,9 @@ fun RegistrationScreen(){
                 textStyle = TextStyle(fontSize = 15.sp)
             )
             TextField(
-                value = email.uppercase(),
+                value = email,
                 onValueChange = { email = it },
-                placeholder = { Text(text = "EMAIL", color = Color.Gray)},
+                placeholder = { Text(text = "Email", color = Color.Gray)},
                 trailingIcon = { Icon(Icons.Rounded.Email, "Email")},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
@@ -162,7 +167,7 @@ fun RegistrationScreen(){
             TextField(
                 value = password,
                 onValueChange = { password = it },
-                placeholder = { Text(text = "PASSWORD", color = Color.Gray)},
+                placeholder = { Text(text = "Password", color = Color.Gray)},
                 trailingIcon = {
 
                     TextButton(onClick = {
@@ -193,7 +198,7 @@ fun RegistrationScreen(){
             TextField(
                 value = confirmPass,
                 onValueChange = { confirmPass = it },
-                placeholder = { Text(text = "CONFIRM PASSWORD", color = Color.Gray)},
+                placeholder = { Text(text = "Confirm Password", color = Color.Gray)},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -248,7 +253,6 @@ fun RegistrationScreen(){
                         tween<Icon>(1000)
                         Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "DropUp", modifier = Modifier.size(40.dp))
                     }
-//                        Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "DropDown", modifier = Modifier.size(40.dp))
 
                 }
 
@@ -270,6 +274,8 @@ fun RegistrationScreen(){
                             onClick = {
                                 selectedIndex = index
                                 expanded = false
+                                selectedCourse = s.take(s.length)
+
                             },
                             colors = MenuDefaults.itemColors(
                                 textColor = Color.Black
@@ -282,7 +288,9 @@ fun RegistrationScreen(){
             }
             Spacer(modifier = Modifier.height(30.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate(MainScreens.LOGIN.name)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = RedOrange
                 ),
@@ -299,3 +307,4 @@ fun RegistrationScreen(){
     }
 
 }
+

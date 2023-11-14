@@ -4,5 +4,6 @@ enum class MainScreens {
     LOGIN,
     REGISTER,
     SPLASH,
-    AUTH
+    AUTH,
+    DASHBOARD
 }
