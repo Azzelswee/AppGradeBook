@@ -212,7 +212,8 @@ fun RegistrationScreen(){
                 } else {
                     Modifier
                         .border(1.dp,Color.Red, RoundedCornerShape(5.dp))
-                }
+                },
+                visualTransformation = PasswordVisualTransformation()
 
             )
             Box (
