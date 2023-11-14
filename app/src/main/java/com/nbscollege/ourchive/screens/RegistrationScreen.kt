@@ -1,7 +1,8 @@
 package com.nbscollege.ourchive.screens
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Indication
+import android.graphics.drawable.Icon
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,10 +19,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
@@ -45,13 +49,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nbscollege.ourchive.R
 import com.nbscollege.ourchive.ui.theme.Gold
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import kotlinx.coroutines.flow.merge
@@ -72,6 +87,10 @@ fun RegistrationScreen(){
     )
     var disabledItem = "SELECT YOUR COURSE: "
     var selectedIndex by remember { mutableStateOf(0) }
+    var seePassText by remember {
+        mutableStateOf(false)
+    }
+    var seeText = PasswordVisualTransformation()
 
     Column{
         Row (
@@ -109,26 +128,33 @@ fun RegistrationScreen(){
                 color = RedOrange
             )
             TextField(
-                value = username,
+                value = username.uppercase(),
                 onValueChange = { username = it },
                 placeholder = { Text(text = "USERNAME", color = Color.Gray)},
                 trailingIcon = { Icon(Icons.Rounded.Person, "Username")},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black
                 ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 modifier = Modifier
-                    .border(1.dp,Color.Black, RoundedCornerShape(5.dp))
+                    .border(1.dp,Color.Black, RoundedCornerShape(5.dp)),
+                textStyle = TextStyle(fontSize = 15.sp)
             )
             TextField(
-                value = email,
+                value = email.uppercase(),
                 onValueChange = { email = it },
                 placeholder = { Text(text = "EMAIL", color = Color.Gray)},
                 trailingIcon = { Icon(Icons.Rounded.Email, "Email")},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black
                 ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier
                     .border(1.dp,Color.Black, RoundedCornerShape(5.dp))
             )
@@ -137,11 +163,30 @@ fun RegistrationScreen(){
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text(text = "PASSWORD", color = Color.Gray)},
-                trailingIcon = { Icon(Icons.Rounded.Lock, "Password")},
+                trailingIcon = {
+
+                    TextButton(onClick = {
+                        seePassText = !seePassText
+
+                    }) {
+                        if(seePassText){
+                            Image( painterResource(id = R.drawable.eye), "Eye Open", modifier = Modifier.size(30.dp))
+
+                        }
+                        else{
+                            Image( painterResource(id = R.drawable.eye_closed), "Eye Closed", modifier = Modifier.size(30.dp))
+                        }
+                    }
+
+                },
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black
                 ),
+                visualTransformation = if(seePassText){ VisualTransformation.None } else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier
                     .border(1.dp,Color.Black, RoundedCornerShape(5.dp))
             )
@@ -151,10 +196,24 @@ fun RegistrationScreen(){
                 placeholder = { Text(text = "CONFIRM PASSWORD", color = Color.Gray)},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black
                 ),
-                modifier = Modifier
-                    .border(1.dp,Color.Black, RoundedCornerShape(5.dp))
+                modifier =
+
+                if(password.isEmpty() && confirmPass.isEmpty()){
+
+                    Modifier
+                        .border(1.dp,Color.Black, RoundedCornerShape(5.dp))
+                }else if (password == confirmPass){
+                    Modifier
+                        .border(1.dp,Color.Green, RoundedCornerShape(5.dp))
+                } else {
+                    Modifier
+                        .border(1.dp,Color.Red, RoundedCornerShape(5.dp))
+                }
+
             )
             Box (
                 modifier = Modifier
@@ -182,7 +241,14 @@ fun RegistrationScreen(){
                             .wrapContentSize(Alignment.CenterStart)
                             .padding(start = 20.dp)
                     )
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "DropDown", modifier = Modifier.size(40.dp))
+                    if(!expanded){
+                        Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "DropDown", modifier = Modifier.size(40.dp))
+                    }else{
+                        tween<Icon>(1000)
+                        Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "DropUp", modifier = Modifier.size(40.dp))
+                    }
+//                        Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "DropDown", modifier = Modifier.size(40.dp))
+
                 }
 
 
@@ -220,9 +286,9 @@ fun RegistrationScreen(){
                     containerColor = RedOrange
                 ),
                 modifier = Modifier
-
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .height(50.dp),
+                shape = RoundedCornerShape(10.dp)
             ) {
                 Text(text = "REGISTER")
             }
