@@ -68,9 +68,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
+
 import com.nbscollege.ourchive.model.RegisterData
 
 import com.nbscollege.ourchive.navigation.MainScreens
+import com.nbscollege.ourchive.savedData
 import com.nbscollege.ourchive.ui.theme.Gold
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import kotlinx.coroutines.flow.merge
@@ -292,7 +294,7 @@ fun RegistrationScreen(
                 onClick = {
                     navController.navigate(MainScreens.LOGIN.name)
                     val register = RegisterData(username, email, password, course = courses[selectedIndex])
-                    accessLogin(saveData(registerData = register))
+                    savedData.add(register)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = RedOrange
@@ -310,10 +312,5 @@ fun RegistrationScreen(
     }
 
 }
-fun saveData(registerData: RegisterData): ArrayList<RegisterData>{
 
-    val userLists = ArrayList<RegisterData>()
-    userLists.add(registerData)
-    return userLists
-}
 

@@ -28,7 +28,7 @@ fun OurChiveApp(){
             RegistrationScreen(navController)
         }
         composable(route = MainScreens.DASHBOARD.name){
-            Dashboard()
+            Dashboard(navController)
         }
     }
 }

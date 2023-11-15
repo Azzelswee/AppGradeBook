@@ -1,6 +1,9 @@
 package com.nbscollege.ourchive.screens
 
-import android.graphics.Typeface
+
+import android.app.AlertDialog
+import android.app.Dialog
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,11 +27,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,10 +44,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
+
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.googlefonts.GoogleFont
+
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -50,11 +55,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
 import com.nbscollege.ourchive.model.RegisterData
+import com.nbscollege.ourchive.model.accessLogin
 
 import com.nbscollege.ourchive.navigation.MainScreens
+import com.nbscollege.ourchive.savedData
 import com.nbscollege.ourchive.ui.theme.RedOrange
-import com.nbscollege.ourchive.ui.theme.Typography
-import java.io.File
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +75,9 @@ fun LoginScreen(navController: NavController){
     var seePassText by remember {
         mutableStateOf(false)
     }
-    val filePath = File("register.csv")
+    var isLoggedIn by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -152,6 +160,13 @@ fun LoginScreen(navController: NavController){
                 Button(
                     onClick = {
 
+                        if(accessLogin(username, password)){
+                            isLoggedIn = true
+                            navController.navigate(MainScreens.DASHBOARD.name)
+                        }
+                        
+
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = RedOrange
@@ -163,6 +178,16 @@ fun LoginScreen(navController: NavController){
                 ) {
                     Text(text = "LOGIN")
                 }
+            }
+            if(isLoggedIn){
+                LaunchedEffect(isLoggedIn){
+                    delay(2000)
+                    isLoggedIn = false
+                }
+                ShowSnackbar(message = "Successfully Logged In")
+            }
+            else {
+                ShowSnackbar(message = "Incorrect Credentials")
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -178,10 +203,13 @@ fun LoginScreen(navController: NavController){
             }
 
         }
+        
     }
 
 }
-
-fun accessLogin(registerData: ArrayList<RegisterData>){
-
+@Composable
+fun ShowSnackbar(message: String) {
+    Snackbar(
+        content = { Text(text = message) }
+    )
 }
