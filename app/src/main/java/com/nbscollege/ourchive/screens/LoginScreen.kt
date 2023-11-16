@@ -3,6 +3,7 @@ package com.nbscollege.ourchive.screens
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
+import com.nbscollege.ourchive.model.LoginData
 import com.nbscollege.ourchive.model.RegisterData
 import com.nbscollege.ourchive.model.accessLogin
 
@@ -61,7 +63,8 @@ import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.savedData
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import kotlinx.coroutines.delay
-
+import kotlin.coroutines.coroutineContext
+var access = false;
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,10 +78,8 @@ fun LoginScreen(navController: NavController){
     var seePassText by remember {
         mutableStateOf(false)
     }
-    var isLoggedIn by remember {
-        mutableStateOf(false)
-    }
 
+    var context: Context;
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -159,14 +160,11 @@ fun LoginScreen(navController: NavController){
             ) {
                 Button(
                     onClick = {
-
-                        if(accessLogin(username, password)){
-                            isLoggedIn = true
+                        if(accessLogin(LoginData(username, password))){
+                            access = true
                             navController.navigate(MainScreens.DASHBOARD.name)
+
                         }
-                        
-
-
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = RedOrange
@@ -179,16 +177,8 @@ fun LoginScreen(navController: NavController){
                     Text(text = "LOGIN")
                 }
             }
-            if(isLoggedIn){
-                LaunchedEffect(isLoggedIn){
-                    delay(2000)
-                    isLoggedIn = false
-                }
-                ShowSnackbar(message = "Successfully Logged In")
-            }
-            else {
-                ShowSnackbar(message = "Incorrect Credentials")
-            }
+
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -206,10 +196,6 @@ fun LoginScreen(navController: NavController){
         
     }
 
+
 }
-@Composable
-fun ShowSnackbar(message: String) {
-    Snackbar(
-        content = { Text(text = message) }
-    )
-}
+

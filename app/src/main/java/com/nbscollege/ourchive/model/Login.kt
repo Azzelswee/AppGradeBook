@@ -9,10 +9,10 @@ data class LoginData(
     val password: String
 )
 
-fun accessLogin(username: String, password: String): Boolean{
+fun accessLogin(logIn: LoginData): Boolean{
 
     for(i in savedData) {
-        if (username == i.username && password == i.password) {
+        if (logIn.username == i.username && logIn.password == i.password) {
             return true
         }
     }
