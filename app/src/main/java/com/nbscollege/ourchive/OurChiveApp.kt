@@ -5,10 +5,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
+import com.nbscollege.ourchive.navigation.DashboardNav
 import com.nbscollege.ourchive.navigation.MainScreens
+import com.nbscollege.ourchive.screens.ComSciScreen
 import com.nbscollege.ourchive.screens.Dashboard
+import com.nbscollege.ourchive.screens.ElectricityScreen
+import com.nbscollege.ourchive.screens.ElectronicsScreen
 import com.nbscollege.ourchive.screens.LoginScreen
 import com.nbscollege.ourchive.screens.RegistrationScreen
+import com.nbscollege.ourchive.screens.RoboticsScreen
 import com.nbscollege.ourchive.viewmodel.ScreenViewModel
 
 @Composable
@@ -27,8 +33,21 @@ fun OurChiveApp(){
         composable(route = MainScreens.REGISTER.name){
             RegistrationScreen(navController)
         }
-        composable(route = MainScreens.DASHBOARD.name){
-            Dashboard(navController)
+        composable(route = DashboardNav.ComSci.name){
+            ComSciScreen(navController = navController)
         }
+        composable(route = DashboardNav.Robotics.name){
+            RoboticsScreen(navController = navController)
+        }
+        composable(route = DashboardNav.Electronics.name){
+            ElectronicsScreen(navController = navController)
+        }
+        composable(route = DashboardNav.Electricity.name){
+            ElectricityScreen(navController = navController)
+        }
+        composable(route = MainScreens.DASHBOARD.name){
+            Dashboard(navController = navController)
+        }
+
     }
 }

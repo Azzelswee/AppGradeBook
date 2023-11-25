@@ -1,8 +1,4 @@
 package com.nbscollege.ourchive.model
-import com.nbscollege.ourchive.savedData
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
 
 data class LoginData(
     val username : String,

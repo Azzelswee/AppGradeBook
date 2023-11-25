@@ -1,10 +1,7 @@
 package com.nbscollege.ourchive.screens
 
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,14 +25,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,12 +52,12 @@ import com.nbscollege.ourchive.R
 import com.nbscollege.ourchive.model.LoginData
 import com.nbscollege.ourchive.model.RegisterData
 import com.nbscollege.ourchive.model.accessLogin
+import com.nbscollege.ourchive.model.savedData
 
 import com.nbscollege.ourchive.navigation.MainScreens
-import com.nbscollege.ourchive.savedData
 import com.nbscollege.ourchive.ui.theme.RedOrange
-import kotlinx.coroutines.delay
-import kotlin.coroutines.coroutineContext
+import com.nbscollege.ourchive.ui.theme.fontFamily
+
 var access = false;
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,6 +74,7 @@ fun LoginScreen(navController: NavController){
     }
 
     var context: Context;
+//    savedData.add(RegisterData("Je", "", "0", ""))
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -103,7 +98,7 @@ fun LoginScreen(navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(text = "WELCOME!", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.headlineLarge)
-                Text(text = "Sign in to access your account")
+                Text(text = "Sign in to access your account", fontFamily = fontFamily)
             }
             TextField(
                 value = username,

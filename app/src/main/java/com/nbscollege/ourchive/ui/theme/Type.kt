@@ -16,32 +16,20 @@ private val fontProvider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 @OptIn(ExperimentalTextApi::class)
-private val googleFont = GoogleFont("Poppins",true)
+private val googleFont = GoogleFont(name = "Poppins")
 
 @OptIn(ExperimentalTextApi::class)
-private val fontFamily = FontFamily(
+val fontFamily = FontFamily(
     Font(googleFont = googleFont, fontProvider = fontProvider)
 )
 // Set of Material typography styles to start with
-private val typography = Typography()
+
 val Typography = Typography(
-    displayLarge = typography.displayLarge.copy(fontFamily = fontFamily),
-    displayMedium = typography.displayMedium.copy(fontFamily = fontFamily),
-    displaySmall = typography.displaySmall.copy(fontFamily = fontFamily),
-
-    headlineLarge = typography.headlineLarge.copy(fontFamily = fontFamily),
-    headlineMedium = typography.headlineMedium.copy(fontFamily = fontFamily),
-    headlineSmall = typography.headlineSmall.copy(fontFamily = fontFamily),
-
-    titleLarge = typography.titleLarge.copy(fontFamily = fontFamily),
-    titleMedium = typography.titleMedium.copy(fontFamily = fontFamily),
-    titleSmall = typography.titleSmall.copy(fontFamily = fontFamily),
-
-    bodyLarge = typography.bodyLarge.copy(fontFamily = fontFamily),
-    bodyMedium = typography.bodyMedium.copy(fontFamily = fontFamily),
-    bodySmall = typography.bodySmall.copy(fontFamily = fontFamily),
-
-    labelLarge = typography.labelLarge.copy(fontFamily = fontFamily),
-    labelMedium = typography.labelMedium.copy(fontFamily = fontFamily),
-    labelSmall = typography.labelSmall.copy(fontFamily = fontFamily),
+    bodyLarge = TextStyle(
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    )
 )

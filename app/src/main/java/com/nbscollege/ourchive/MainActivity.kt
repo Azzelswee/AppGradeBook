@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OurChiveApp()
-            
+
             if(access){
                 Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
             }
