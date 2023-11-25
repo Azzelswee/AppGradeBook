@@ -2,6 +2,7 @@ package com.nbscollege.ourchive.screens
 
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 
@@ -58,11 +60,12 @@ import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import com.nbscollege.ourchive.ui.theme.fontFamily
 
-var access = false;
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController){
+    var access = false
     var username by remember {
         mutableStateOf("")
     }
@@ -97,7 +100,7 @@ fun LoginScreen(navController: NavController){
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text(text = "WELCOME!", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.headlineLarge)
+                Text(text = "WELCOME!", fontWeight = FontWeight.Bold, fontFamily = fontFamily)
                 Text(text = "Sign in to access your account", fontFamily = fontFamily)
             }
             TextField(
@@ -153,13 +156,18 @@ fun LoginScreen(navController: NavController){
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp)
             ) {
+                val context = LocalContext.current
                 Button(
                     onClick = {
-                        if(accessLogin(LoginData(username, password))){
-                            access = true
-                            navController.navigate(MainScreens.DASHBOARD.name)
 
+                        if(accessLogin(LoginData(username, password))){
+                            Toast.makeText(context, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                            navController.navigate(MainScreens.DASHBOARD.name)
                         }
+                        else {
+                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                        }
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = RedOrange
@@ -171,6 +179,7 @@ fun LoginScreen(navController: NavController){
                 ) {
                     Text(text = "LOGIN")
                 }
+
             }
 
 
@@ -190,6 +199,7 @@ fun LoginScreen(navController: NavController){
         }
         
     }
+
 
 
 }

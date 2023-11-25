@@ -4,5 +4,9 @@ enum class DashboardNav {
     ComSci,
     Robotics,
     Electronics,
-    Electricity
+    Electricity,
+    Home,
+    Profile,
+    Settings,
+    CourseScreen
 }

@@ -33,18 +33,7 @@ fun OurChiveApp(){
         composable(route = MainScreens.REGISTER.name){
             RegistrationScreen(navController)
         }
-        composable(route = DashboardNav.ComSci.name){
-            ComSciScreen(navController = navController)
-        }
-        composable(route = DashboardNav.Robotics.name){
-            RoboticsScreen(navController = navController)
-        }
-        composable(route = DashboardNav.Electronics.name){
-            ElectronicsScreen(navController = navController)
-        }
-        composable(route = DashboardNav.Electricity.name){
-            ElectricityScreen(navController = navController)
-        }
+
         composable(route = MainScreens.DASHBOARD.name){
             Dashboard(navController = navController)
         }
