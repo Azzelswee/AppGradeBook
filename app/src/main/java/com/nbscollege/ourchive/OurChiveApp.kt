@@ -25,13 +25,15 @@ fun OurChiveApp(){
 
     NavHost(
         navController = navController,
-        startDestination = MainScreens.LOGIN.name
+        startDestination = MainScreens.AUTH.name
     ){
-        composable(route = MainScreens.LOGIN.name){
-            LoginScreen(navController)
-        }
-        composable(route = MainScreens.REGISTER.name){
-            RegistrationScreen(navController)
+        navigation(startDestination = MainScreens.LOGIN.name, route = MainScreens.AUTH.name){
+            composable(route = MainScreens.LOGIN.name){
+                LoginScreen(navController)
+            }
+            composable(route = MainScreens.REGISTER.name){
+                RegistrationScreen(navController)
+            }
         }
 
         composable(route = MainScreens.DASHBOARD.name){

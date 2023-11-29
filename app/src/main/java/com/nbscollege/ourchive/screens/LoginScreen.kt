@@ -162,6 +162,7 @@ fun LoginScreen(navController: NavController){
 
                         if(accessLogin(LoginData(username, password))){
                             Toast.makeText(context, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack(route = MainScreens.AUTH.name, inclusive = true)
                             navController.navigate(MainScreens.DASHBOARD.name)
                         }
                         else {
