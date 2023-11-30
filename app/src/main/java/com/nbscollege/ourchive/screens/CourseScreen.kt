@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun CourseScreen(navController: NavController, name: String){
+fun CourseScreen(navController: NavController){
     Column (
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(text = name)
+        Text(text = "Quiz Game")
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -95,7 +96,59 @@ import kotlin.system.exitProcess
         var filled by remember {
             mutableStateOf(false)
         }
-
+        var backHandlingEnabled by remember { mutableStateOf(true) }
+//    NavHost(navController = navController, startDestination = MainScreen.Dashboard.name){
+//        composable(route = MainScreen.Dashboard.name){
+//            Dashboard(navController = navController)
+//        }
+//    }
+        var pressedbackCount by remember {
+            mutableIntStateOf(0)
+        }
+        var showDialog by remember {
+            mutableStateOf(false)
+        }
+        BackHandler(backHandlingEnabled, onBack = {
+            pressedbackCount++
+            println(pressedbackCount)
+        })
+        if(showDialog){
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        showDialog = false
+                    },colors = ButtonDefaults.buttonColors(
+                        containerColor = RedOrange,
+                        contentColor = Color.White
+                    )){
+                        Text(text = "Cancel")
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = {
+                        exitProcess(0)
+                    },colors = ButtonDefaults.buttonColors(
+                        containerColor = RedOrange,
+                        contentColor = Color.White)) {
+                        Text(text = "OK")
+                    }
+                },
+                title = {
+                    Text(
+                        text = "Warning!"
+                    )},
+                text = {
+                    Text(text = "Do you want to exit?")
+                }
+            )
+        }
+        else if(pressedbackCount == 2){
+            showDialog = true
+            pressedbackCount = 0
+        }
         Scaffold(
             topBar = {
                 Column(
@@ -226,7 +279,7 @@ import kotlin.system.exitProcess
 //                    CourseScreen(navController = navController,courseName)
 //                }
                     println(name.savedStateHandle.contains("name"))
-                    CourseScreen(navController = navController, "")
+                    CourseScreen(navController = navController, )
 
                 }
             }

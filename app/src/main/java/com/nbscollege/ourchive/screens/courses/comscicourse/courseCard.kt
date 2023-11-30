@@ -40,7 +40,7 @@ fun CourseCard(course: CourseCodes, navController: NavController){
             .height(100.dp)
             .fillMaxWidth(),
         onClick = {
-            navController.currentBackStackEntry?.savedStateHandle?.set(COURSE_NAME, course.name)
+
             navController.navigate(DashboardNav.CourseScreen.name)
         },
         colors = CardDefaults.cardColors(
