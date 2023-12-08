@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -190,7 +191,9 @@ import kotlin.system.exitProcess
                             .size(30.dp)
                             .clickable(
                                 onClick = {
-                                    dashNav.navigate(DashboardNav.Home.name)
+                                    dashNav.navigate(DashboardNav.Home.name){
+                                        popUpTo(dashNav.graph.findStartDestination().id)
+                                    }
                                     item = 1
                                 }
                             ),
@@ -213,7 +216,9 @@ import kotlin.system.exitProcess
                             .size(30.dp)
                             .clickable(
                                 onClick = {
-                                    dashNav.navigate(DashboardNav.Profile.name)
+                                    dashNav.navigate(DashboardNav.Profile.name){
+                                        popUpTo(dashNav.graph.findStartDestination().id)
+                                    }
                                     item = 2
                                 }
                             ),
@@ -231,7 +236,9 @@ import kotlin.system.exitProcess
                         .size(30.dp)
                         .clickable(
                             onClick = {
-                                dashNav.navigate(DashboardNav.Settings.name)
+                                dashNav.navigate(DashboardNav.Settings.name){
+                                    popUpTo(dashNav.graph.findStartDestination().id)
+                                }
                                 item = 3
                             }
                         ),
@@ -271,15 +278,9 @@ import kotlin.system.exitProcess
                 composable(route = DashboardNav.Electricity.name) {
                     ElectricityScreen(navController = dashNav)
                 }
-                composable(route = DashboardNav.CourseScreen.name) { name ->
-//                println(name.savedStateHandle.get<String>(COURSE_NAME))
-//                val courseName = name.savedStateHandle.get<String>(COURSE_NAME)
-//                println(courseName+"H")
-//                courseName?.let{
-//                    CourseScreen(navController = navController,courseName)
-//                }
-                    println(name.savedStateHandle.contains("name"))
-                    CourseScreen(navController = navController, )
+                composable(route = DashboardNav.CourseScreen.name) {
+
+                    CourseScreen(navController = navController)
 
                 }
             }
