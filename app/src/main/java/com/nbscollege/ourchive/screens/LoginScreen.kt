@@ -1,6 +1,7 @@
 package com.nbscollege.ourchive.screens
 
 
+import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -32,6 +33,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,8 +51,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
+import com.nbscollege.ourchive.database.QuizDatabase
 import com.nbscollege.ourchive.model.LoginData
 import com.nbscollege.ourchive.model.RegisterData
 import com.nbscollege.ourchive.model.accessLogin
@@ -59,12 +63,26 @@ import com.nbscollege.ourchive.model.savedData
 import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.ui.theme.RedOrange
 import com.nbscollege.ourchive.ui.theme.fontFamily
-
+import com.nbscollege.ourchive.viewmodel.LoginViewModel
+import com.nbscollege.ourchive.viewmodel.LoginViewModelFactory
+import com.nbscollege.ourchive.viewmodel.QuizViewModel
+import com.nbscollege.ourchive.viewmodel.QuizViewModelFactory
+import com.nbscollege.ourchive.viewmodel.RegisterViewModel
+import com.nbscollege.ourchive.viewmodel.RegisterViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController){
+
+    val application: Application = LocalContext.current.applicationContext as Application
+    val loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(
+            application = application
+        )
+    )
+
+    val login: QuizViewModel = viewModel(factory = QuizViewModelFactory(application))
     var access = false
     var username by remember {
         mutableStateOf("")
@@ -76,8 +94,13 @@ fun LoginScreen(navController: NavController){
         mutableStateOf(false)
     }
 
-    var context: Context;
+    val context = LocalContext.current
+
+    val loggedInUser by loginViewModel.loggedInUser.observeAsState()
 //    savedData.add(RegisterData("Je", "", "0", ""))
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -85,6 +108,7 @@ fun LoginScreen(navController: NavController){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxHeight(0.8f)
@@ -156,18 +180,19 @@ fun LoginScreen(navController: NavController){
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp)
             ) {
-                val context = LocalContext.current
+
                 Button(
                     onClick = {
+                        loginViewModel.loginUser(username, password)
+//                        println(loggedInUser)
 
-                        if(accessLogin(LoginData(username, password))){
-                            Toast.makeText(context, "Successfully Logged In", Toast.LENGTH_SHORT).show()
-                            navController.popBackStack(route = MainScreens.AUTH.name, inclusive = true)
-                            navController.navigate(MainScreens.DASHBOARD.name)
-                        }
-                        else {
-                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
-                        }
+//                        if(accessLogin(LoginData(username, password))){
+//
+//
+//                        }
+//                        else {
+//                            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+//                        }
 
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -184,6 +209,7 @@ fun LoginScreen(navController: NavController){
             }
 
 
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -196,6 +222,18 @@ fun LoginScreen(navController: NavController){
                         }
                     ))
             }
+            loggedInUser?.let {
+                    user ->
+                if(loggedInUser?.username == username && loggedInUser?.password == password){
+                    Toast.makeText(context, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack(route = MainScreens.AUTH.name, inclusive = true)
+                    navController.navigate(MainScreens.DASHBOARD.name+"${user.username}")
+                }
+                else {
+                    Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
+                }
+            }
+
 
         }
         

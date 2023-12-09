@@ -2,13 +2,18 @@ package com.nbscollege.ourchive
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.nbscollege.ourchive.dao.UserDao
+import com.nbscollege.ourchive.database.QuizDatabase
 import com.nbscollege.ourchive.navigation.DashboardNav
 import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.screens.ComSciScreen
+import com.nbscollege.ourchive.screens.CourseScreen
 import com.nbscollege.ourchive.screens.Dashboard
 import com.nbscollege.ourchive.screens.ElectricityScreen
 import com.nbscollege.ourchive.screens.ElectronicsScreen
@@ -20,12 +25,12 @@ import com.nbscollege.ourchive.viewmodel.ScreenViewModel
 @Composable
 fun OurChiveApp(){
 
-    val viewModel: ScreenViewModel = viewModel()
+//    val viewModel: ScreenViewModel = viewModel()
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = MainScreens.AUTH.name
+        startDestination = DashboardNav.CourseScreen.name
     ){
         navigation(startDestination = MainScreens.LOGIN.name, route = MainScreens.AUTH.name){
             composable(route = MainScreens.LOGIN.name){
@@ -36,8 +41,26 @@ fun OurChiveApp(){
             }
         }
 
-        composable(route = MainScreens.DASHBOARD.name){
-            Dashboard(navController = navController)
+        composable(
+            route = MainScreens.DASHBOARD.name+"{user}",
+            arguments = listOf(navArgument("user"){ type = NavType.StringType})
+        ){
+            Dashboard(navController = navController, user = it.arguments?.getString("user") ?: "")
+        }
+        composable(route = DashboardNav.CourseScreen.name) {
+            CourseScreen(navController = navController)
+        }
+        composable(route = DashboardNav.ComSci.name) {
+            ComSciScreen(navController = navController)
+        }
+        composable(route = DashboardNav.Robotics.name) {
+            RoboticsScreen(navController = navController)
+        }
+        composable(route = DashboardNav.Electronics.name) {
+            ElectronicsScreen(navController = navController)
+        }
+        composable(route = DashboardNav.Electricity.name) {
+            ElectricityScreen(navController = navController)
         }
 
     }

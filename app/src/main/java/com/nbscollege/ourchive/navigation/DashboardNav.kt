@@ -8,5 +8,6 @@ enum class DashboardNav {
     Home,
     Profile,
     Settings,
-    CourseScreen
+    CourseScreen,
+    BottomNav
 }

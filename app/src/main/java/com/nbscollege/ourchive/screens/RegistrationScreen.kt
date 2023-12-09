@@ -1,6 +1,8 @@
 package com.nbscollege.ourchive.screens
 
+import android.app.Application
 import android.graphics.drawable.Icon
+import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,8 +56,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.nbscollege.ourchive.R
+import com.nbscollege.ourchive.dao.UserDao
+import com.nbscollege.ourchive.data.User
+import com.nbscollege.ourchive.database.QuizDatabase
 
 
 import com.nbscollege.ourchive.model.RegisterData
@@ -62,30 +69,46 @@ import com.nbscollege.ourchive.model.RegisterData
 import com.nbscollege.ourchive.navigation.MainScreens
 import com.nbscollege.ourchive.model.savedData
 import com.nbscollege.ourchive.ui.theme.RedOrange
+import com.nbscollege.ourchive.viewmodel.QuizViewModel
+import com.nbscollege.ourchive.viewmodel.QuizViewModelFactory
+import com.nbscollege.ourchive.viewmodel.RegisterViewModel
+import com.nbscollege.ourchive.viewmodel.RegisterViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.suspendCoroutine
 
+var programs = listOf(
+    "SELECT YOUR COURSE: ",
+    "BS Computer Science",
+    "BS Information Technology"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
-    navController: NavController
-){
+    navController: NavController,
 
+){
+    val application: Application = LocalContext.current.applicationContext as Application
+    val quizViewModel: QuizViewModel = viewModel(
+        factory = QuizViewModelFactory(
+            application = application
+        )
+    )
     var username by remember{ mutableStateOf("") }
     var email by remember{ mutableStateOf("") }
     var password by remember{ mutableStateOf("") }
     var confirmPass by remember{ mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var courses = listOf(
-        "SELECT YOUR COURSE: ",
-        "BS Computer Science",
-        "BS Information Technology"
-    )
+
     var disabledItem = "SELECT YOUR COURSE: "
     var selectedIndex by remember { mutableStateOf(0) }
     var seePassText by remember {
         mutableStateOf(false)
     }
 //    savedData.add(RegisterData("Je19", "email", "123", ""))
-
     Column{
         Row (
                 modifier = Modifier
@@ -229,7 +252,7 @@ fun RegistrationScreen(
                 ){
 
                     Text(
-                        courses[selectedIndex],
+                        programs[selectedIndex],
                         modifier = Modifier
                             .fillMaxHeight()
                             .background(
@@ -252,7 +275,7 @@ fun RegistrationScreen(
                     .fillMaxWidth()
                     .background(Color.White)
                 ) {
-                    courses.forEachIndexed { index, s ->
+                    programs.forEachIndexed { index, s ->
                         DropdownMenuItem(
                             text = {
                                 val disabledColor = if (s == disabledItem) {
@@ -277,12 +300,22 @@ fun RegistrationScreen(
 
             }
             Spacer(modifier = Modifier.height(30.dp))
+            val context = LocalContext.current
             Button(
                 onClick = {
+                    if(
+                        username.isBlank() ||
+                        email.isBlank() ||
+                        password.isBlank() ||
+                        selectedIndex == 0){
+                        println("Blank")
+                        Toast.makeText(context, "Please fill out all fields.", Toast.LENGTH_LONG).show()
+                    }else {
+                        println("Not Blank")
+                        navController.navigate(MainScreens.LOGIN.name)
+                        quizViewModel.registerUser(username, email, password, selectedIndex)
+                    }
 
-                    navController.navigate(MainScreens.LOGIN.name)
-                    val register = RegisterData(username, email, password, course = courses[selectedIndex])
-                    savedData.add(register)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = RedOrange
@@ -298,10 +331,6 @@ fun RegistrationScreen(
         }
 
     }
-
-}
-
-fun getIndex(){
 
 }
 
